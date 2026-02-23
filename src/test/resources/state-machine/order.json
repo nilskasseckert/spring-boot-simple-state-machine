@@ -1,0 +1,33 @@
+{
+  "states": [
+    {"state": "CREATED", "allowedActions": []},
+    {"state": "PROCESSING", "allowedActions": []},
+    {"state": "REVIEW", "allowedActions": ["APPROVE", "REJECT"]},
+    {"state": "APPROVED", "allowedActions": ["SHIP"]},
+    {"state": "SHIPPED", "allowedActions": []},
+    {"state": "COMPLETED", "allowedActions": []},
+    {"state": "REJECTED", "allowedActions": []},
+    {"state": "ERROR_PROCESSING", "allowedActions": ["RETRY"]}
+  ],
+  "transitions": [
+    { "type": "SUCCESS", "from": "CREATED", "to": "PROCESSING" },
+
+    {
+      "type": "CONDITIONAL",
+      "from": "PROCESSING",
+      "conditions": [
+        { "when": "#order.totalAmount > 1000", "to": "REVIEW" },
+        { "else": "APPROVED" }
+      ]
+    },
+    { "type": "ERROR", "from": "PROCESSING", "to": "ERROR_PROCESSING" },
+
+    { "type": "SUCCESS", "from": "REVIEW", "to": "APPROVED" },
+
+    { "type": "SUCCESS", "from": "APPROVED", "to": "SHIPPED" },
+
+    { "type": "SUCCESS", "from": "SHIPPED", "to": "COMPLETED" },
+
+    { "type": "SUCCESS", "from": "ERROR_PROCESSING", "to": "CREATED" }
+  ]
+}
