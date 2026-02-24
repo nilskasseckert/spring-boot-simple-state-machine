@@ -18,21 +18,10 @@ Add the dependency to your `pom.xml`:
 
 ```xml
 <dependency>
-    <groupId>de.nilskasseckert</groupId>
+    <groupId>io.github.nilskasseckert</groupId>
     <artifactId>spring-boot-simple-state-machine</artifactId>
     <version>0.0.1</version>
 </dependency>
-```
-
-For GitHub Packages, add the repository:
-
-```xml
-<repositories>
-    <repository>
-        <id>github</id>
-        <url>https://maven.pkg.github.com/nilskasseckert/spring-boot-simple-state-machine</url>
-    </repository>
-</repositories>
 ```
 
 ## Quick Start
@@ -318,7 +307,7 @@ git push origin v0.1.0
 
 This will:
 1. Build and test the project
-2. Publish the artifact to GitHub Packages
+2. Publish the artifact to Maven Central
 3. Create a GitHub Release with auto-generated release notes
 
 ## License

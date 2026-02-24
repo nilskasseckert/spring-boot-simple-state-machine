@@ -1,2 +1,2 @@
-de.nilskasseckert.statemachine.config.SimpleStateMachineAutoConfiguration
-de.nilskasseckert.statemachine.config.SimpleStateMachineMultiAutoConfiguration
+io.github.nilskasseckert.statemachine.config.SimpleStateMachineAutoConfiguration
+io.github.nilskasseckert.statemachine.config.SimpleStateMachineMultiAutoConfiguration
