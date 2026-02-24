@@ -1,0 +1,17 @@
+{
+  "states": [
+    { "state": "PENDING", "allowedActions": [] },
+    { "state": "AUTHORIZED", "allowedActions": ["CAPTURE", "VOID"] },
+    { "state": "CAPTURED", "allowedActions": ["REFUND"] },
+    { "state": "REFUNDED", "allowedActions": [] },
+    { "state": "VOIDED", "allowedActions": [] },
+    { "state": "FAILED", "allowedActions": ["RETRY"] }
+  ],
+  "transitions": [
+    { "type": "SUCCESS", "from": "PENDING", "to": "AUTHORIZED" },
+    { "type": "ERROR", "from": "PENDING", "to": "FAILED" },
+    { "type": "SUCCESS", "from": "AUTHORIZED", "to": "CAPTURED" },
+    { "type": "SUCCESS", "from": "CAPTURED", "to": "REFUNDED" },
+    { "type": "SUCCESS", "from": "FAILED", "to": "PENDING" }
+  ]
+}

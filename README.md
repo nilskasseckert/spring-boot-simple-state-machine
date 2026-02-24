@@ -10,6 +10,7 @@ A simple, JSON-driven state machine for Spring Boot with support for success, er
 - Action-based authorization per state
 - Spring Application Events for invalid state and illegal action errors
 - Auto-configuration via `simple-state-machine.definition` property
+- Multiple independent state machines per project via `SimpleStateMachineFactory`
 
 ## Installation
 
@@ -236,6 +237,55 @@ public class StateMachineEventListener {
 - `StateMachineIllegalActionException` - thrown when an action is not allowed in the current state
 
 Both extend `StateMachineException` which extends `RuntimeException`.
+
+## Multiple State Machines
+
+If your project requires multiple independent state machines (e.g. one for orders and one for payments), use the `SimpleStateMachineFactory`.
+
+### 1. Define Multiple State Machines
+
+Create separate JSON files for each state machine:
+
+- `src/main/resources/state-machine/order.json`
+- `src/main/resources/state-machine/payment.json`
+
+### 2. Configure the Properties
+
+```properties
+simple-state-machine.definitions.order=state-machine/order.json
+simple-state-machine.definitions.payment=state-machine/payment.json
+```
+
+Each key after `definitions.` becomes the name used to retrieve the state machine.
+
+### 3. Use the Factory
+
+Inject `SimpleStateMachineFactory` and retrieve state machines by name:
+
+```java
+@Service
+@RequiredArgsConstructor
+public class OrderService {
+
+    private final SimpleStateMachineFactory stateMachineFactory;
+
+    public void processOrder(Order order) {
+        var orderStateMachine = stateMachineFactory.get("order");
+        String nextState = orderStateMachine.nextStateForSuccess(order.getState());
+        order.setState(nextState);
+    }
+
+    public void processPayment(Payment payment) {
+        var paymentStateMachine = stateMachineFactory.get("payment");
+        String nextState = paymentStateMachine.nextStateForSuccess(payment.getState());
+        payment.setState(nextState);
+    }
+}
+```
+
+Each state machine is fully independent with its own states, transitions, and allowed actions.
+
+> **Note:** You can use both modes together. Set `simple-state-machine.definition` for a single auto-configured `SimpleStateMachineService` bean, and `simple-state-machine.definitions.*` for additional state machines via the factory.
 
 ## Advanced: Custom StateMachineConfig Bean
 

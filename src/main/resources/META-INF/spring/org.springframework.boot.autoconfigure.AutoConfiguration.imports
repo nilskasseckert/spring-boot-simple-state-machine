@@ -1,1 +1,2 @@
 de.nilskasseckert.statemachine.config.SimpleStateMachineAutoConfiguration
+de.nilskasseckert.statemachine.config.SimpleStateMachineMultiAutoConfiguration
