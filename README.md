@@ -148,12 +148,17 @@ Transitions to the target state when the operation failed:
 
 #### CONDITIONAL
 
-Evaluates SpEL conditions in order. The first matching condition determines the target state. An `else` clause serves as the default fallback:
+Evaluates SpEL conditions in order. The first matching condition determines the target state. An `else` clause serves as the default fallback.
+
+The `on` field specifies whether the conditional applies on success or error. It defaults to `SUCCESS` if omitted.
+
+**Conditional on success** (default):
 
 ```json
 {
   "type": "CONDITIONAL",
   "from": "PROCESSING",
+  "on": "SUCCESS",
   "conditions": [
     { "when": "#order.totalAmount > 1000", "to": "REVIEW" },
     { "when": "#order.priority == 'HIGH'", "to": "REVIEW" },
@@ -162,10 +167,25 @@ Evaluates SpEL conditions in order. The first matching condition determines the 
 }
 ```
 
-Variables referenced in SpEL expressions (e.g. `#order`) must be passed via the `variables` map:
+**Conditional on error:**
+
+```json
+{
+  "type": "CONDITIONAL",
+  "from": "APPROVED",
+  "on": "ERROR",
+  "conditions": [
+    { "when": "#error.retryable", "to": "ERROR_PROCESSING" },
+    { "else": "REJECTED" }
+  ]
+}
+```
+
+Variables referenced in SpEL expressions (e.g. `#order`, `#error`) must be passed via the `variables` map:
 
 ```java
 stateMachineService.nextStateForSuccess(currentState, Map.of("order", myOrder));
+stateMachineService.nextStateForError(currentState, Map.of("error", myError));
 ```
 
 You can also register enum constants as variables to use them in expressions:

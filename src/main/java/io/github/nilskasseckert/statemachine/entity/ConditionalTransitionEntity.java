@@ -12,7 +12,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ConditionalTransitionEntity extends AbstractTransitionEntity {
+    private TransitionType on;
     private List<Condition> conditions;
+
+    public TransitionType getOn() {
+        return on != null ? on : TransitionType.SUCCESS;
+    }
 
     @JsonTypeInfo(use = JsonTypeInfo.Id.DEDUCTION)
     @JsonSubTypes({

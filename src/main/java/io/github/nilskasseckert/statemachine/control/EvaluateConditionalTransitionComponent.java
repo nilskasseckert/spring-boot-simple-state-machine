@@ -19,11 +19,6 @@ public class EvaluateConditionalTransitionComponent {
     private final ExpressionParser parser = new SpelExpressionParser();
 
     public String execute(StateTransitionContext context, ConditionalTransitionEntity conditionalTransition) {
-
-        if (!context.getCompletedSuccessfully()) {
-            return null;
-        }
-
         val evaluationContext = createEvaluationContext(context);
 
         val nextStateByCondition = conditionalTransition.getConditions().stream()

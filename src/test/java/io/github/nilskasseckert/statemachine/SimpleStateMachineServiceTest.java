@@ -87,9 +87,29 @@ class SimpleStateMachineServiceTest {
         assertEquals("CREATED", nextState);
     }
 
+    @Test
+    void shouldEvaluateConditionalErrorTransition() {
+        var nextState = stateMachineService.nextStateForError("APPROVED",
+                Map.of("error", new TestError(true)));
+        assertEquals("ERROR_PROCESSING", nextState);
+    }
+
+    @Test
+    void shouldEvaluateConditionalErrorTransitionElseBranch() {
+        var nextState = stateMachineService.nextStateForError("APPROVED",
+                Map.of("error", new TestError(false)));
+        assertEquals("REJECTED", nextState);
+    }
+
     public record TestOrder(int totalAmount) {
         public int getTotalAmount() {
             return totalAmount;
+        }
+    }
+
+    public record TestError(boolean retryable) {
+        public boolean isRetryable() {
+            return retryable;
         }
     }
 }

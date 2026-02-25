@@ -66,7 +66,9 @@ public class EvaluateStateTransitionForNextStateComponent {
     }
 
     private String handleConditionalTransitionEntry(StateTransitionContext context, ConditionalTransitionEntity transitionEntry) {
-        if (!context.getCompletedSuccessfully()) {
+        val expectsSuccess = transitionEntry.getOn() == TransitionType.SUCCESS;
+
+        if (context.getCompletedSuccessfully() != expectsSuccess) {
             return null;
         }
 

@@ -25,6 +25,15 @@
     { "type": "SUCCESS", "from": "REVIEW", "to": "APPROVED" },
 
     { "type": "SUCCESS", "from": "APPROVED", "to": "SHIPPED" },
+    {
+      "type": "CONDITIONAL",
+      "from": "APPROVED",
+      "on": "ERROR",
+      "conditions": [
+        { "when": "#error.retryable", "to": "ERROR_PROCESSING" },
+        { "else": "REJECTED" }
+      ]
+    },
 
     { "type": "SUCCESS", "from": "SHIPPED", "to": "COMPLETED" },
 
